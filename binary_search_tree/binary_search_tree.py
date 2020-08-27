@@ -10,7 +10,10 @@ This part of the project comprises two days:
    on the BSTNode class.
 """
 
-from queue import Queue 
+import sys
+sys.path.extend(['queue', 'stack', 'binary_search_tree'])
+from queue import Queue # pylint: disable=import-error
+from stack import Stack # pylint: disable=import-error
 
 class BSTNode:
     def __init__(self, value):
@@ -93,32 +96,43 @@ class BSTNode:
 
     # Print all the values in order from low to high
     # Hint:  Use a recursive, depth first traversal
-    def in_order_print(self, node = None):
+    def in_order_print(self):
         pass
+        if not self:
+            return
+        if self.left:
+            self.left.in_order_print()
+        print(self.value)
+        if self.right:
+            self.right.in_order_print()
 
     # Print the value of every node, starting with the given node,
     # in an iterative breadth first traversal
-    def bft_print(self, node = None):
+    
+    def bft_print(self, node):
         queue = Queue()
-        if node: 
-            queue.enqueue(node)
-        else: queue.enqueue(self)
-
-        while len(queue) > 0:
-            current_node = queue.dequeue()
-
-            if current_node.left:
-                queue.enqueue(current_node.left)
-            if current_node.right:
-                queue.enqueue(current_node.right)
-            
-
-            print(current_node.value)
+        queue.put(node)
+        while not queue.empty():
+            node = queue.get()
+            print(node.value)
+            if node.left:
+                queue.put(node.left)
+            if node.right:
+                queue.put(node.right)
 
     # Print the value of every node, starting with the given node,
     # in an iterative depth first traversal
-    def dft_print(self):
-        pass
+    
+    def dft_print(self, node):
+        stack = Stack()
+        stack.push(node)
+        while not stack.isEmpty():
+            node = stack.pop()
+            print(node.value)
+            if node.right:
+                stack.push(node.right)
+            if node.left:
+                stack.push(node.left)
 
     # Stretch Goals -------------------------
     # Note: Research may be required
